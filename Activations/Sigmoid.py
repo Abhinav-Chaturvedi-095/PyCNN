@@ -7,6 +7,7 @@ class Sigmoid(Activation):
             return 1/(1+np.exp(-x))
     
         def sigmoid_derivative(x):
-            return sigmoid(x) * (1 - sigmoid(x))
+            sig = sigmoid(x)
+            return sig * (1 - sig)
         
         super.__init__(sigmoid,sigmoid_derivative)

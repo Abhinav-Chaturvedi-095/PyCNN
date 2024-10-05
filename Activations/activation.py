@@ -1,9 +1,9 @@
 import numpy as np
 
 class Activation():
-    def __init__(self,activation,activation_deriavtive) -> None:
+    def __init__(self,activation,activation_derivative) -> None:
         self.activation = activation
-        self.activation_deriavtive = activation_deriavtive
+        self.activation_derivative = activation_derivative
         self.input = None
 
     def forward(self,input):
@@ -11,4 +11,4 @@ class Activation():
         return self.activation(self.input)
     
     def backward(self,nodeValues):
-        return np.multiply(nodeValues,self.activation_deriavtive(self.input))
+        return np.multiply(nodeValues,self.activation_derivative(self.input))
