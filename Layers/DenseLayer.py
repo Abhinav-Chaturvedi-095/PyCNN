@@ -3,25 +3,28 @@ from layers.base import Layer
 
 
 class Dense(Layer):
-    def __init__(self, in_features, out_features, initializer):
+    def __init__(self, in_features, out_features, initializer, name="Dense"):
         self.W = initializer((in_features, out_features))
         self.b = np.zeros(out_features)
 
+        self.dW = None
+        self.db = None
+        self.name = name
 
-    def forward(self, X, training=True):
-        self.X = X
-        return X @ self.W + self.b
+    def forward(self, inputs, training=True):
+        self.inputs = inputs
+        return inputs @ self.W + self.b
 
+    def backward(self, grad_output):
+        batch_size = grad_output.shape[0]
 
-    def backward(self, dY):
-        self.dW = self.X.T @ dY
-        self.db = dY.sum(axis=0)
-        return dY @ self.W.T
+        self.dW = self.inputs.T @ grad_output / batch_size
+        self.db = grad_output.mean(axis=0)
 
+        return grad_output @ self.W.T
 
-    def params(self):
-        return [self.W, self.b]
-
-
-    def grads(self):
-        return [self.dW, self.db]
+    def get_params(self):
+        return [
+            (self.W, self.dW, f"{self.name}_W"),
+            (self.b, self.db, f"{self.name}_b"),
+        ]

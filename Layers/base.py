@@ -1,15 +1,13 @@
 class Layer:
-    def forward(self, X, training=True):
+    def forward(self, inputs, training=True):
         raise NotImplementedError
 
-
-    def backward(self, dY):
+    def backward(self, grad_output):
         raise NotImplementedError
 
-
-    def params(self):
-        return []
-
-
-    def grads(self):
+    def get_params(self):
+        """
+        Returns list of tuples:
+        (param, grad, param_name)
+        """
         return []

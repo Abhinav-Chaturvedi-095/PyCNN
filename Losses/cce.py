@@ -2,12 +2,13 @@ import numpy as np
 from Losses.losses import Loss
 
 class CategoricalCrossEntropy(Loss):
-    def __init__(self):
-        def cce(predicted, actual):
-            predicted = np.clip(predicted, 1e-12, 1 - 1e-12)
-            return -np.sum(actual * np.log(predicted)) / actual.shape[0]
+    def forward(self, y_pred, y_true):
+        self.y_pred = np.clip(y_pred, 1e-7, 1 - 1e-7)
+        self.y_true = y_true
 
-        def cce_derivative(predicted, actual):
-            return (predicted - actual) / actual.shape[0]
+        return -np.mean(
+            np.sum(y_true * np.log(self.y_pred), axis=1)
+        )
 
-        super().__init__(cce, cce_derivative)
+    def backward(self):
+        return self.y_pred - self.y_true

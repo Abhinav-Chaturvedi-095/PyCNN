@@ -2,10 +2,9 @@ from layers.base import Layer
 
 
 class Flatten(Layer):
-    def forward(self, X, training=True):
-        self.shape = X.shape
-        return X.reshape(X.shape[0], -1)
+    def forward(self, inputs, training=True):
+        self.input_shape = inputs.shape
+        return inputs.reshape(inputs.shape[0], -1)
 
-
-    def backward(self, dY):
-        return dY.reshape(self.shape)
+    def backward(self, grad_output):
+        return grad_output.reshape(self.input_shape)

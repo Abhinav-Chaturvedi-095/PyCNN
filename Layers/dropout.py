@@ -4,15 +4,15 @@ from layers.base import Layer
 
 class Dropout(Layer):
     def __init__(self, rate=0.5):
+        assert 0.0 <= rate < 1.0
         self.rate = rate
 
+    def forward(self, inputs, training=True):
+        if not training:
+            return inputs
 
-    def forward(self, X, training=True):
-        if training:
-            self.mask = np.random.binomial(1, 1 - self.rate, X.shape)
-            return X * self.mask
-        return X
+        self.mask = (np.random.rand(*inputs.shape) > self.rate)
+        return inputs * self.mask / (1 - self.rate)
 
-
-    def backward(self, dY):
-        return dY * self.mask
+    def backward(self, grad_output):
+        return grad_output * self.mask / (1 - self.rate)
