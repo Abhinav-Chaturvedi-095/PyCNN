@@ -1,0 +1,2 @@
+#training.py
+import time
